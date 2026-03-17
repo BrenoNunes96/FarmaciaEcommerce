@@ -1,6 +1,6 @@
 import { InjectRepository } from "@nestjs/typeorm";
 import { categoria } from "../../entities/categoria.entity";
-import { DeleteResult, Repository } from "typeorm";
+import { DeleteResult, ILike, Repository } from "typeorm";
 import { HttpException, HttpStatus } from "@nestjs/common";
 
 export class categoriaService{
@@ -13,7 +13,10 @@ return await this.categoria.find()
 
 }
 async findbyid(id:number):Promise<categoria|null>{
-return await this.categoria.findOne({where:{id}})
+return await this.categoria.findOne({where:{id},  
+    relations:{
+            produtos:true
+        }})
 
 }
 
@@ -23,15 +26,17 @@ if(categoriaCadastro){
    throw new HttpException("categoria ja cadastrada",HttpStatus.NOT_ACCEPTABLE)
 }
 
-return this.categoria.save(x)
+return await this.categoria.save(x)
 
 
 }
 
 async update(x:categoria):Promise<categoria>{   
-const categoriabusca = await this.findbyid(x.id)
-if(categoriabusca && categoriabusca.id !== x.id){
-    throw new HttpException("essa categoria ja foi cadastrada",HttpStatus.BAD_REQUEST)
+    await this.findbyid(x.id)
+const categoriabusca = await this.findbyname(x.nome) // categoria com o nome mesma que estamo que estamos atualizando
+
+if(categoriabusca && categoriabusca.id !== x.id){  // ** caso o id de categoribusca seja diferente da catego que estamos enviando entao ja foi cadastrado
+    throw new HttpException("essa categoria ja foi cadastrada",HttpStatus.BAD_REQUEST) //
 }
 
 return await this.categoria.save(x)
@@ -41,13 +46,19 @@ return await this.categoria.save(x)
 
 async delete(id:number):Promise<DeleteResult>{
 
-return this.categoria.delete(id)
+return  await this.categoria.delete(id)
 
 }
 
-async findbyname(nome:string):Promise<categoria[]>{
+async findbyname(nome:string):Promise<categoria|null>{
 
-    return this.categoria.find({where:{nome}})
+    return  await this.categoria.findOne({
+        where:{nome:ILike(`%${nome}%`)},
+        relations:{
+            produtos:true
+        }
+    
+    })
 
 
 }
