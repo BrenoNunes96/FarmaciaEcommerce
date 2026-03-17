@@ -5,7 +5,8 @@ import { DeleteResult } from "typeorm";
 
 @Controller("/categoria")
 export class categoriController{
-private categoriaService:categoriaService;
+    constructor(private readonly categoriaService:categoriaService){}
+
 
     @Get()
     @HttpCode(HttpStatus.OK)

@@ -4,7 +4,7 @@ import { DeleteResult, Repository } from "typeorm";
 import { HttpException, HttpStatus } from "@nestjs/common";
 
 export class categoriaService{
-constructor(@InjectRepository(categoria)  private readonly categoria:Repository<categoria>){}
+constructor(@InjectRepository(categoria)  private  categoria:Repository<categoria>){}
 
 
 async findall():Promise<categoria[]>{
@@ -18,8 +18,8 @@ return await this.categoria.findOne({where:{id}})
 }
 
 async create(x:categoria):Promise<categoria>{
-const categoriaCadastrada = await this.categoria.find({where:{id:x.id}})
-if(categoriaCadastrada){
+const categoriaCadastro = await this.findbyid(x.id)
+if(categoriaCadastro){
    throw new HttpException("categoria ja cadastrada",HttpStatus.NOT_ACCEPTABLE)
 }
 
