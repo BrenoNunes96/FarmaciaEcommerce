@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { categoria } from './categoria/entities/categoria.entity';
+import { categoriaModule } from './categoria/categoria.module';
 @Module({
   imports: [TypeOrmModule.forRoot({
     type:'mysql',
@@ -14,8 +15,8 @@ import { categoria } from './categoria/entities/categoria.entity';
     entities:[categoria],
     database:'db_farmacia'
 
-  })
-
+  }),
+categoriaModule
 ],
   controllers: [AppController],
   providers: [AppService],
