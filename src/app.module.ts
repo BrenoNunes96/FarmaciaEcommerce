@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { categoria } from './categoria/entities/categoria.entity';
 @Module({
   imports: [TypeOrmModule.forRoot({
     type:'mysql',
@@ -10,7 +11,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     password:"root",
     host:'localhost',
     synchronize:true,
-    entities:[],
+    entities:[categoria],
     database:'db_farmacia'
 
   })
