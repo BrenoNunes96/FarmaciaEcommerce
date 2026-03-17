@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import{ConfigModule} from"@nestjs/config";
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { categoria } from './categoria/entities/categoria.entity';
 import { categoriaModule } from './categoria/categoria.module';
@@ -11,18 +12,13 @@ import { Usuario } from './usuarios/entities/usuario.entity';
 import { AuthModule } from './auth/auth.module';
 import { PedidoModule } from './pedidos/pedido.module';
 import { Pedido } from './pedidos/entities/pedido.entity';
+import { ProdService } from './data/services/prod.service';
 @Module({
-  imports: [TypeOrmModule.forRoot({
-    type:'mysql',
-    port:3306,
-    username:"root",
-    password:"root",
-    host:'localhost',
-    synchronize:true,
-    entities:[Usuario,Produto,categoria,Pedido],
-    database:'db_farmacia'
-
-  }),
+  imports:[ConfigModule.forRoot(),
+TypeOrmModule.forRootAsync({
+	useClass: ProdService,
+    imports: [ConfigModule],
+}),
 categoriaModule,
 produtoModule,
 UsuarioModule,
