@@ -6,6 +6,11 @@ import { categoria } from './categoria/entities/categoria.entity';
 import { categoriaModule } from './categoria/categoria.module';
 import { produtoModule } from './produto/produto.module';
 import { Produto } from './produto/entities/produto.entity';
+import { UsuarioModule } from './usuarios/usuario.module';
+import { Usuario } from './usuarios/entities/usuario.entity';
+import { AuthModule } from './auth/auth.module';
+import { PedidoModule } from './pedidos/pedido.module';
+import { Pedido } from './pedidos/entities/pedido.entity';
 @Module({
   imports: [TypeOrmModule.forRoot({
     type:'mysql',
@@ -14,12 +19,15 @@ import { Produto } from './produto/entities/produto.entity';
     password:"root",
     host:'localhost',
     synchronize:true,
-    entities:[Produto,categoria],
+    entities:[Usuario,Produto,categoria,Pedido],
     database:'db_farmacia'
 
   }),
 categoriaModule,
-produtoModule
+produtoModule,
+UsuarioModule,
+AuthModule,
+PedidoModule
 ],
   controllers: [AppController],
   providers: [AppService],
